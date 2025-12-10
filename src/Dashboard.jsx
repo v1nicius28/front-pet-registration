@@ -3,7 +3,7 @@ import axios from "axios";
 import PetForm from "./PetForm";
 import PetList from "./PetList";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "https://api-pet-registration.onrender.com";
 
 const Dashboard = () => {
   const [pets, setPets] = useState([]);
