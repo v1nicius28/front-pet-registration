@@ -22,7 +22,7 @@ CSS Modules / estilos adicionais conforme necessário
 
 🔗 Hospedagem
 
-Frontend: Vercel → https://front-pet-registration.vercel.app/
+Frontend: Vercel → https://front-pet-registration.vercel.app
 
 Backend: Render (API Spring Boot)
 
