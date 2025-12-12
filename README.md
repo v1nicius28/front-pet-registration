@@ -3,7 +3,7 @@
 Interface web construída com React + Vite e estilizada com TailwindCSS. O frontend consome a API Pet Registration (hospedada no Render) para realizar operações de CRUD em pets.
 
 
-<img width="1920" height="936" alt="Captura de Tela (16)" src="https://github.com/user-attachments/assets/965f883d-26ba-4ee6-82d4-f45079fbea92" />
+<img width="1920" height="941" alt="Captura de Tela (17)" src="https://github.com/user-attachments/assets/981ad860-3b38-45e7-9ffa-2c43cf3e67b2" />
 
 
 🚀 Tecnologias Utilizadas
