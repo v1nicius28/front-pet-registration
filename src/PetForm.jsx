@@ -12,7 +12,6 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
       raca: "",
       endereco: { rua: "", numero: "", cidade: "" },
     });
-    setErrors({ idade: "", peso: "", numero: "" });
   };
 
   const [form, setForm] = useState({
@@ -24,8 +23,6 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
     raca: "",
     endereco: { rua: "", numero: "", cidade: "" },
   });
-
-  const [errors, setErrors] = useState({ idade: "", peso: "", numero: "" });
 
   // Preencher formulário quando pet for passado
   useEffect(() => {
@@ -43,7 +40,6 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
           cidade: pet.endereco.cidade,
         },
       });
-      setErrors({ idade: "", peso: "", numero: "" });
     } else {
       resetForm();
     }
@@ -53,16 +49,6 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validação de números
-    if (["idade", "peso", "numero"].includes(name)) {
-      if (!/^\d*$/.test(value)) {
-        setErrors((prev) => ({ ...prev, [name]: "Digite apenas números" }));
-      } else {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
-    }
-
-    // Atualiza endereço ou campos principais
     if (["rua", "numero", "cidade"].includes(name)) {
       setForm({ ...form, endereco: { ...form.endereco, [name]: value } });
     } else {
@@ -73,21 +59,6 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
   // Envio do formulário
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Valida campos numéricos antes de enviar
-    if (!/^\d+$/.test(form.idade)) {
-      setErrors((prev) => ({ ...prev, idade: "Idade deve ser um número" }));
-      return;
-    }
-    if (!/^\d+$/.test(form.peso)) {
-      setErrors((prev) => ({ ...prev, peso: "Peso deve ser um número" }));
-      return;
-    }
-    if (!/^\d+$/.test(form.endereco.numero)) {
-      setErrors((prev) => ({ ...prev, numero: "Número da casa deve ser um número" }));
-      return;
-    }
-
     onSubmit(form);
     resetForm();
   };
@@ -97,6 +68,7 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
       <h2 className="text-2xl font-semibold mb-6 text-[#cb3cff]">
         {pet ? "Editar Pet" : "Adicionar Pet"}
       </h2>
+
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Nome */}
         <input
@@ -115,18 +87,23 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
             value={form.tipo}
             onChange={handleChange}
             required
-            className={`w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] focus:outline-none focus:ring-2 focus:ring-[#cb3cff] ${form.tipo === "" ? "text-[#AEB9E1]" : "text-white"}`}
+            className={`w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] focus:outline-none focus:ring-2 focus:ring-[#cb3cff] ${
+              form.tipo === "" ? "text-[#AEB9E1]" : "text-white"
+            }`}
           >
             <option value="" disabled>Selecione o tipo</option>
             <option value="CACHORRO">Cachorro</option>
             <option value="GATO">Gato</option>
           </select>
+
           <select
             name="sexo"
             value={form.sexo}
             onChange={handleChange}
             required
-            className={`w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] focus:outline-none focus:ring-2 focus:ring-[#cb3cff] ${form.sexo === "" ? "text-[#AEB9E1]" : "text-white"}`}
+            className={`w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] focus:outline-none focus:ring-2 focus:ring-[#cb3cff] ${
+              form.sexo === "" ? "text-[#AEB9E1]" : "text-white"
+            }`}
           >
             <option value="" disabled>Selecione o sexo</option>
             <option value="MACHO">Macho</option>
@@ -136,28 +113,29 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
 
         {/* Idade e Peso */}
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <input
-              type="text"
-              name="idade"
-              placeholder="Idade (anos)"
-              value={form.idade}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
-            />
-            {errors.idade && <p className="text-red-500 text-sm mt-1">{errors.idade}</p>}
-          </div>
-          <div>
-            <input
-              type="text"
-              name="peso"
-              placeholder="Peso (kg)"
-              value={form.peso}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
-            />
-            {errors.peso && <p className="text-red-500 text-sm mt-1">{errors.peso}</p>}
-          </div>
+          <input
+            type="number"
+            name="idade"
+            placeholder="Idade (anos)"
+            value={form.idade}
+            onChange={handleChange}
+            required
+            min="0"
+            step="1"
+            className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
+          />
+
+          <input
+            type="number"
+            name="peso"
+            placeholder="Peso (kg)"
+            value={form.peso}
+            onChange={handleChange}
+            required
+            min="0"
+            step="0.1"
+            className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
+          />
         </div>
 
         {/* Raça */}
@@ -180,17 +158,19 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
             required
             className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
           />
-          <div>
-            <input
-              name="numero"
-              placeholder="Número"
-              value={form.endereco.numero}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
-            />
-            {errors.numero && <p className="text-red-500 text-sm mt-1">{errors.numero}</p>}
-          </div>
+
+          <input
+            type="number"
+            name="numero"
+            placeholder="Número"
+            value={form.endereco.numero}
+            onChange={handleChange}
+            required
+            min="0"
+            step="1"
+            className="w-full px-4 py-3 bg-[#0b1739] border rounded-xl border-[#343b4f] text-white focus:outline-none focus:ring-2 focus:ring-[#cb3cff] placeholder-[#AEB9E1]"
+          />
+
           <input
             name="cidade"
             placeholder="Cidade"
@@ -212,11 +192,13 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
           >
             {pet ? "Salvar Alterações" : "Criar"}
           </button>
+
           {pet && (
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 text-white font-bold py-3 rounded-md transition-all duration-200 bg-[#0038FF] hover:bg-[#1D4AEA] hover:scale-105 active:scale-95"
+              className="flex-1 text-white font-bold py-3 rounded-md transition-all duration-200
+                         bg-[#0038FF] hover:bg-[#1D4AEA] hover:scale-105 active:scale-95"
             >
               Cancelar
             </button>
@@ -228,4 +210,5 @@ const PetForm = ({ pet, onSubmit, onCancel }) => {
 };
 
 export default PetForm;
+
 
